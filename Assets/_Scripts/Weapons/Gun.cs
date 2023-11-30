@@ -8,44 +8,45 @@ using UnityEngine.UIElements;
 public class Gun : MonoBehaviour
 {
     [Header("Fiering")]
-    public float fireRate;
-    public bool holedToFire;
-    public float damage;
-    public Camera playerCam;
+    [SerializeField] protected float fireRate;
+	[SerializeField] bool holedToFire;
+	[SerializeField] protected float damage;
+	[SerializeField] protected Camera playerCam;
 
     [Header("Magazin")]
-    public int magSize;
-    public int ammoBullets;
+	[SerializeField] protected int magSize;
+	[SerializeField] protected int ammoSize;
 
     [Header("Reload")]
-    public float reloadTime;
+	[SerializeField] protected float reloadTime;
+    int magBefore;
+    int ammoBefore;
 
     [Header("MuzzleFlash")]
-	public GameObject muzzleFlashPrefab;
-    public Transform muzzle;
-    public float muzzleFlashLiftime = 0.1f;
+	[SerializeField] public GameObject muzzleFlashPrefab;
+	[SerializeField] public Transform muzzle;
+    [SerializeField] public float muzzleFlashLiftime = 0.1f;
 
-    [Header("Bullet Hole")]
-    public GameObject bulletHolePrefab;
-    public GameObject impactPrefab;
+    [Header("UI")]
+	[SerializeField] public TMPro.TextMeshProUGUI ammo;
 
-    [Header("Visuals")]
-	public TMPro.TextMeshProUGUI ammo;
+    protected bool shooting;
+	protected bool canshoot;
 
-    bool shooting;
-    bool canshoot;
+	protected int bulletsInMag;
+    protected int bulletsInAmmo;
 
-    int bulletsInMag;
-    int bulletsInAmmo;
+    protected bool realoding;
 
-    bool realoding;
+    PlayerCamera CameraScript;
 
 	private void Start()
 	{
 		canshoot = true;
         bulletsInMag = magSize;
-        bulletsInAmmo = ammoBullets - bulletsInMag;
+        bulletsInAmmo = ammoSize - bulletsInMag;
         realoding = false;
+        CameraScript = playerCam.GetComponent<PlayerCamera>();
         UpdateAmmoText();
 	}
 
@@ -54,7 +55,7 @@ public class Gun : MonoBehaviour
         GunInput();
 	}
 
-	void GunInput()
+	protected void GunInput()
     {
         if (realoding)
             return;
@@ -73,11 +74,10 @@ public class Gun : MonoBehaviour
         }
     }
 
-    void Shoot()
+    public virtual void Shoot()
     {
         canshoot = false;
         bulletsInMag--;
-        UpdateAmmoText();
         RaycastHit rayHit;
         if(Physics.Raycast(playerCam.transform.position, playerCam.transform.forward, out rayHit, Mathf.Infinity))
         {
@@ -85,31 +85,33 @@ public class Gun : MonoBehaviour
             {
                 Debug.Log(rayHit.transform.name);
 			}
-            else
-            {
-				try
-                {
-					rayHit.transform.gameObject.GetComponent<My_Object>().Hit(damage, rayHit);
-				}
-                catch
-                {
-                    try
-                    {
-                        rayHit.transform.gameObject.GetComponentInParent<My_Object>().Hit(damage, rayHit);
-                    }
-                    catch { }
-                }
-				
-			}
-           
-        }
-        HandleMuzzleFlash();
+			else
+			{
+				My_Object hitObject = rayHit.transform.GetComponent<My_Object>();
 
+				if (hitObject == null)
+				{
+					hitObject = rayHit.transform.GetComponentInParent<My_Object>();
+				}
+                if(hitObject != null)
+                    hitObject.Hit(damage, rayHit);
+			}
+
+		}
 		Debug.DrawRay(playerCam.transform.position, playerCam.transform.forward * rayHit.distance, Color.yellow, 5);
 		Invoke("ResetCanShoot", 60 / fireRate);
+        ShootVisuals();
     }
 
-    void HandleMuzzleFlash()
+    protected void ShootVisuals()
+    {
+		UpdateAmmoText();
+		if (CameraScript != null)
+			CameraScript.Recoil();
+		HandleMuzzleFlash();
+	}
+
+	protected void HandleMuzzleFlash()
     {
 		GameObject muzzleFlash = Instantiate(muzzleFlashPrefab, muzzle);
         // Rotation
@@ -137,6 +139,8 @@ public class Gun : MonoBehaviour
     {
         realoding = true;
         StartCoroutine(ReloadCoroutine());
+        ammoBefore = bulletsInAmmo;
+        magBefore = bulletsInMag;
     }
     IEnumerator ReloadCoroutine()
     {
@@ -153,9 +157,19 @@ public class Gun : MonoBehaviour
        }
        realoding = false;
     }
-    void UpdateAmmoText()
+	public void UpdateAmmoText()
     {
         if (ammo == null) return;
         ammo.text = $"{bulletsInMag}/{bulletsInAmmo}";
+    }
+
+    public void StopReload()
+    {
+        if (!realoding)
+            return;
+        StopCoroutine(ReloadCoroutine());
+        bulletsInMag = magBefore;
+        bulletsInAmmo = ammoBefore;
+        realoding = false;
     }
 }

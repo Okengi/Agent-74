@@ -14245,7 +14245,7 @@ GameObject:
   - component: {fileID: 4383311703909159783}
   - component: {fileID: 4382751307926631929}
   m_Layer: 0
-  m_Name: HitEffect
+  m_Name: HitEffect_Iron
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

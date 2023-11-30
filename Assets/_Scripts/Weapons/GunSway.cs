@@ -5,7 +5,7 @@ using UnityEngine;
 public class GunSway : MonoBehaviour
 {
 	[SerializeField] public Transform weaponTransform;
-
+	//TODO: Understand this script
 	[Header("Sway Properties")]
 	[SerializeField] private float swayAmount = 0.01f;
 	[SerializeField] public float maxSwayAmount = 0.1f;

@@ -114,6 +114,7 @@ MonoBehaviour:
   fireRate: 360
   holedToFire: 1
   damage: 50
+  bulletsPerShot: 1
   playerCam: {fileID: 0}
   magSize: 25
   ammoBullets: 100
@@ -122,6 +123,7 @@ MonoBehaviour:
   muzzle: {fileID: 7158118752042655549}
   muzzleFlashLiftime: 0.1
   bulletHolePrefab: {fileID: 5268830379638511466, guid: 6543e8a2557a24348910b815e76fd0b5, type: 3}
+  impactPrefab: {fileID: 0}
   ammo: {fileID: 0}
 --- !u!114 &6922174082888106893
 MonoBehaviour:

@@ -16,5 +16,8 @@ MonoBehaviour:
   interactable: 0
   Health: 1000
   impactPrefap: {fileID: 4473179152970230509, guid: c0b198c65c82e6342b52a73ddad978bc, type: 3}
-  holePrefap: {fileID: 5268830379638511466, guid: 6543e8a2557a24348910b815e76fd0b5, type: 3}
+  holePrefaps:
+  - {fileID: 7551406623962181685, guid: e8cc55db575b3b74fab20e50daf31037, type: 3}
+  - {fileID: 3162727174890623626, guid: 0d7efc3990b3cb1428bfcee939d0a9a8, type: 3}
+  - {fileID: 4057986502548256427, guid: 37fa3dedfd59ff24fb8274765e36d0bf, type: 3}
   holeLifetime: 15

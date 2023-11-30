@@ -14,6 +14,8 @@ public class PlayerMovment : MonoBehaviour
 	public float airMultiplier;
 	bool readyToJump;
 
+
+
 	[Header("Keybinds")]
 	public KeyCode jumpKey = KeyCode.Space;
 

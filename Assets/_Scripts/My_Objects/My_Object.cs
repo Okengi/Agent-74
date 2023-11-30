@@ -20,13 +20,16 @@ public class My_Object : MonoBehaviour
 		{
 			DestroySelf();
 		}
-		var hole = Instantiate(my_object.holePrefap, rayHit.point + new Vector3(rayHit.normal.x * 0.01f, rayHit.normal.y * 0.01f, rayHit.normal.z * 0.01f), Quaternion.LookRotation(-rayHit.normal));
-		var impact = Instantiate(my_object.impactPrefap, rayHit.point + new Vector3(rayHit.normal.x * 0.01f, rayHit.normal.y * 0.01f, rayHit.normal.z * 0.01f), Quaternion.LookRotation(rayHit.normal));
+		var hole = Instantiate(my_object.holePrefaps[Random.Range(0, my_object.holePrefaps.Length)], rayHit.point + new Vector3(rayHit.normal.x * 0.01f, rayHit.normal.y * 0.01f, rayHit.normal.z * 0.01f), Quaternion.LookRotation(-rayHit.normal));
+		Quaternion randomRotation = Quaternion.Euler(0,0, Random.Range(0, 360));
+		hole.transform.rotation = Quaternion.LookRotation(-rayHit.normal, Vector3.up) * randomRotation;
 		hole.transform.parent = transform;
+
+		var impact = Instantiate(my_object.impactPrefap, rayHit.point + new Vector3(rayHit.normal.x * 0.02f, rayHit.normal.y * 0.02f, rayHit.normal.z * 0.02f), Quaternion.LookRotation(rayHit.normal));
 		impact.transform.parent = transform;
 
 		Destroy(hole, my_object.holeLifetime);
-
+		Destroy(impact, 3f);
 	}
 
 	private void DestroySelf()

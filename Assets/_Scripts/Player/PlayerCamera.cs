@@ -8,7 +8,13 @@ public class PlayerCamera : MonoBehaviour
     public float sensX;
     public float sensY;
 
-    public Transform orientation;
+	[Header("Recoil")]
+	public float recoilIntensity = 10f;
+	public float horiziontalRecoil = 5f;
+	public float duration;
+	float time;
+
+	public Transform orientation;
 
     float xRotation;
     float yRotation;
@@ -27,8 +33,20 @@ public class PlayerCamera : MonoBehaviour
 		yRotation += mouseX;
 		xRotation -= mouseY;
 		xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+		if (time > 0)
+		{
+			
+			xRotation -= (recoilIntensity * Time.deltaTime)/duration;
+			yRotation -= (Random.Range(-horiziontalRecoil, horiziontalRecoil) * Time.deltaTime)/duration;
+			time -= Time.deltaTime;
+		}
 
 		transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
 		orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+	}
+
+	public void Recoil()
+	{
+		time = duration;
 	}
 }

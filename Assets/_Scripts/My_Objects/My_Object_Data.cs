@@ -10,6 +10,6 @@ public class My_Object_Data : ScriptableObject
 	public float Health = 1000f;
 
 	public GameObject impactPrefap;
-	public GameObject holePrefap;
+	public GameObject[] holePrefaps;
 	public float holeLifetime = 15f;
 }
