@@ -4,29 +4,68 @@ using UnityEngine;
 
 public class Recoil : MonoBehaviour
 {
-	public AnimationCurve verticalRecoilCurve;
-	public AnimationCurve horizontalRecoilCurve;
-
-	
-	float verticalRecoil;
-	float horizontalRecoil;
+	public float verticalRecoilAmount = 10f;
+	public float horizontalRecoil = 5f;
+	public float duration = 0.1f;
 	float time;
+	float reverseTimer;
+	int counter = 0;
 
-	public float vverticalRecoil = 1.0f;
+	float xRotation;
+	float yRotation;
 
-	public void GenerateRecoil()
-	{
-		// Rotate the camera's local rotation by applying recoil to its vertical axis
-		transform.Rotate(-vverticalRecoil, 0f, 0f);
-	}
 
 	private void Update()
 	{
+		xRotation = transform.localRotation.x;
+		yRotation = transform.localRotation.y;
+
+
 		if (time > 0)
 		{
-			transform.rotation = Quaternion.Euler(horizontalRecoil * 10+transform.rotation.x, transform.rotation.y, transform.rotation.z);
-			time -= Time.deltaTime;
+			ApplyRecoil();
 		}
-		
+
+		if (reverseTimer > 0 && time <= 0)
+		{
+			xRotation += (verticalRecoilAmount * Time.deltaTime) / duration * counter;
+			yRotation += (Random.Range(-horizontalRecoil, horizontalRecoil) * Time.deltaTime) / duration;
+			reverseTimer -= Time.deltaTime;
+			if (reverseTimer <= 0)
+			{
+				counter = 0;
+			}
+		}
+		else
+		{
+			reverseTimer = 0;
+		}
+
+
+
+		transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+	}
+
+	void ApplyRecoil()
+	{
+		xRotation -= (verticalRecoilAmount * Time.deltaTime) / duration;
+		yRotation -= (Random.Range(-horizontalRecoil, horizontalRecoil) * Time.deltaTime) / duration;
+		time -= Time.deltaTime;
+		if (time <= 0)
+			Invoke("SetRevers", duration);
+	}
+
+	void SetRevers()
+	{
+		if (time <= 0)
+		{
+			reverseTimer = duration;
+		}
+	}
+
+	public void DoRecoil()
+	{
+		counter++;
+		time = duration;
 	}
 }

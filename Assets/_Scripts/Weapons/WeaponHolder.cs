@@ -10,27 +10,33 @@ public class WeaponHolder : MonoBehaviour
 	int lastAktiv = 0;
 	GameObject aktiv;
 	bool changed;
+	public Camera playerCam;
+	PlayerCamera CamScript;
+	Gun AktivGunScript;
 	private void Start()
 	{
         aktiveWeapon = 0;
 		lastAktiv = 0;
 		aktiv = weapons[0];
-		changed = false;
-		Debug.Log(weapons.Length);
+		AktivGunScript = aktiv.GetComponent<Gun>();
+		CamScript = playerCam.GetComponent<PlayerCamera>();
+		CamScript.NewWeapon(AktivGunScript.verticalRecoil, AktivGunScript.horizontalRecoil, AktivGunScript.duration);
 	}
 	private void Update()
 	{
 		WeaponHolderInput();
-		if(changed && aktiveWeapon != lastAktiv)
+		if(aktiveWeapon != lastAktiv)
 		{
-			aktiv.GetComponent<Gun>().StopReload();
+			AktivGunScript.StopReload();
 			aktiv.SetActive(false);
 			aktiv = weapons[aktiveWeapon];
+			AktivGunScript = aktiv.GetComponent<Gun>();
 			aktiv.SetActive(true);
-			aktiv.GetComponent<Gun>().UpdateAmmoText();
+			AktivGunScript.UpdateAmmoText();
 			lastAktiv = aktiveWeapon;
+			CamScript.NewWeapon(AktivGunScript.verticalRecoil, AktivGunScript.horizontalRecoil, AktivGunScript.duration);
 		}
-		changed = false;
+
 	}
 	void WeaponHolderInput()
     {
@@ -38,12 +44,10 @@ public class WeaponHolder : MonoBehaviour
 		if (i < 0)
 		{
 			aktiveWeapon--;
-			changed = true;
 		}
 		else if (i > 0)
 		{
 			aktiveWeapon++;
-			changed = true;
 		}
 		aktiveWeapon = Mathf.Clamp(aktiveWeapon, 0, weapons.Length - 1);
     }

@@ -1,18 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-	[Header("Base")]
-    public float sensX;
-    public float sensY;
+	[Range(0.1f, 800f), SerializeField] float sensitivity = 400f;
+	[Tooltip("Limits vertical Camera rotation."), Range(0f, 90f), SerializeField] float rotationLimit = 90f;
+	[SerializeField] bool inverted = false;
 
+	//TODO Edit recoil system to accapte values from the gun fiering
 	[Header("Recoil")]
 	public float recoilIntensity = 10f;
-	public float horiziontalRecoil = 5f;
+	public float horizontalRecoil = 5f;
 	public float duration;
 	float time;
+	float reverseTimer;
+	int counter = 0;
 
 	public Transform orientation;
 
@@ -27,26 +28,67 @@ public class PlayerCamera : MonoBehaviour
 
 	private void Update()
 	{
-		float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensX;
-		float mouseY = Input.GetAxisRaw("Mouse Y")* Time.deltaTime * sensY;
+		float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensitivity;
+		float mouseY = Input.GetAxisRaw("Mouse Y")* Time.deltaTime * sensitivity;
 
 		yRotation += mouseX;
 		xRotation -= mouseY;
 		xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+
+
 		if (time > 0)
 		{
-			
-			xRotation -= (recoilIntensity * Time.deltaTime)/duration;
-			yRotation -= (Random.Range(-horiziontalRecoil, horiziontalRecoil) * Time.deltaTime)/duration;
-			time -= Time.deltaTime;
+			ApplyRecoil();
 		}
 
-		transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
-		orientation.rotation = Quaternion.Euler(0, yRotation, 0);
+		if (reverseTimer > 0 && time <= 0)
+		{
+			xRotation += (recoilIntensity * Time.deltaTime) / duration * counter / 2;
+			reverseTimer -= Time.deltaTime;
+			if (reverseTimer <= 0)
+			{
+				counter = 0;
+			}
+		}
+		else
+		{
+			reverseTimer = 0;
+		}
+
+
+
+		//transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+		transform.rotation = Quaternion.Euler(transform.rotation.x + xRotation, transform.rotation.y + yRotation, transform.rotation.z);
+		orientation.rotation = Quaternion.Euler(0, orientation.rotation.y + yRotation, 0);
 	}
 
-	public void Recoil()
+	void ApplyRecoil()
 	{
+		xRotation -= (recoilIntensity * Time.deltaTime) / duration;
+		yRotation -= (Random.Range(-horizontalRecoil, horizontalRecoil) * Time.deltaTime) / duration;
+		time -= Time.deltaTime;
+		if (time <= 0)
+			Invoke("SetRevers", duration);
+	}
+
+	void SetRevers()
+	{
+		if (time <= 0)
+		{
+			reverseTimer = duration * 2;
+		}
+	}
+
+	public void NewWeapon(float vertical, float horizontal, float duration)
+	{
+		recoilIntensity = vertical;
+		horizontalRecoil = horizontal;
+		this.duration = duration;
+	}
+
+	public void DoRecoil()
+	{
+		counter++;
 		time = duration;
 	}
 }

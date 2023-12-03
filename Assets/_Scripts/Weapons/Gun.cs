@@ -13,6 +13,11 @@ public class Gun : MonoBehaviour
 	[SerializeField] protected float damage;
 	[SerializeField] protected Camera playerCam;
 
+    [Header("Recoil")]
+    [SerializeField] public float verticalRecoil;
+    [SerializeField] public float horizontalRecoil;
+    [SerializeField] public float duration;
+
     [Header("Magazin")]
 	[SerializeField] protected int magSize;
 	[SerializeField] protected int ammoSize;
@@ -107,7 +112,7 @@ public class Gun : MonoBehaviour
     {
 		UpdateAmmoText();
 		if (CameraScript != null)
-			CameraScript.Recoil();
+			CameraScript.DoRecoil();
 		HandleMuzzleFlash();
 	}
 
@@ -137,10 +142,10 @@ public class Gun : MonoBehaviour
 
     void Reload()
     {
-        realoding = true;
+		ammoBefore = bulletsInAmmo;
+		magBefore = bulletsInMag;
+		realoding = true;
         StartCoroutine(ReloadCoroutine());
-        ammoBefore = bulletsInAmmo;
-        magBefore = bulletsInMag;
     }
     IEnumerator ReloadCoroutine()
     {
