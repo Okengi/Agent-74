@@ -4,13 +4,13 @@ public class PlayerCamera : MonoBehaviour
 {
 	[Range(0.1f, 800f), SerializeField] float sensitivity = 400f;
 	[Tooltip("Limits vertical Camera rotation."), Range(0f, 90f), SerializeField] float rotationLimit = 90f;
-	[SerializeField] bool inverted = false;
+	bool invertedX= false;
+	bool invertedY = false;
 
-	//TODO Edit recoil system to accapte values from the gun fiering
-	[Header("Recoil")]
-	public float recoilIntensity = 10f;
-	public float horizontalRecoil = 5f;
-	public float duration;
+
+	float recoilIntensity;
+	float horizontalRecoil;
+	float duration;
 	float time;
 	float reverseTimer;
 	int counter = 0;
@@ -31,16 +31,19 @@ public class PlayerCamera : MonoBehaviour
 		float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * sensitivity;
 		float mouseY = Input.GetAxisRaw("Mouse Y")* Time.deltaTime * sensitivity;
 
+		if (invertedX)
+			mouseX = -mouseX;
+		if (invertedY)
+			mouseY = -mouseY;
+
 		yRotation += mouseX;
 		xRotation -= mouseY;
 		xRotation = Mathf.Clamp(xRotation, -90f, 90f);
-
 
 		if (time > 0)
 		{
 			ApplyRecoil();
 		}
-
 		if (reverseTimer > 0 && time <= 0)
 		{
 			xRotation += (recoilIntensity * Time.deltaTime) / duration * counter / 2;
@@ -54,8 +57,6 @@ public class PlayerCamera : MonoBehaviour
 		{
 			reverseTimer = 0;
 		}
-
-
 
 		//transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
 		transform.rotation = Quaternion.Euler(transform.rotation.x + xRotation, transform.rotation.y + yRotation, transform.rotation.z);

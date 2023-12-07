@@ -88,7 +88,7 @@ public class Gun : MonoBehaviour
         {
             if (rayHit.transform.tag == "Player")
             {
-                Debug.Log(rayHit.transform.name);
+                
 			}
 			else
 			{
