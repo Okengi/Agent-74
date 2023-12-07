@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using UnityEngine;
 
-namespace Oki
+namespace Player
 {
 	public class PlayerCamera1 : MonoBehaviour
 	{
@@ -13,15 +13,15 @@ namespace Oki
 		
 		[Header("Camera Settings")]
 		[SerializeField] public float horizontalCameraSpeed = 200f;
-		[SerializeField] private float verticalCameraSeed = 100f;
-		[SerializeField, Range(-180f, 180)] private float downMaxLookAngle = -90f;
-		[SerializeField, Range(-180f, 180)] private float upMaxLookAngle = 90f;
+		[SerializeField] private float verticalCameraSpeed = 100f;
+		[SerializeField, Range(0, 90)] private float downMaxLookAngle = 90f;
+		[SerializeField, Range(0, 90)] private float upMaxLookAngle = 90f;
 		private float cameraSmoothTime = 1;
 
 		[Header("Camera Values")]
-		[SerializeField] private Vector3 cameraVelocity;
-		[SerializeField] private float horizontal;
-		[SerializeField] private float vertical;
+		private Vector3 cameraVelocity;
+		private float horizontal;
+		private float vertical;
 
 		private void Awake()
 		{
@@ -52,8 +52,8 @@ namespace Oki
 		private void HandleRotation()
 		{
 			horizontal += (PlayerInputManager.instance.horizontalCamerInput * horizontalCameraSpeed) * Time.deltaTime;
-			vertical -= (PlayerInputManager.instance.verticalCamerInput * verticalCameraSeed) * Time.deltaTime;
-			vertical = Mathf.Clamp(vertical, downMaxLookAngle, upMaxLookAngle);
+			vertical -= (PlayerInputManager.instance.verticalCamerInput * verticalCameraSpeed) * Time.deltaTime;
+			vertical = Mathf.Clamp(vertical, -upMaxLookAngle, downMaxLookAngle);
 
 			Vector3 cameraRotation = Vector3.zero;
 			cameraRotation.y = horizontal;

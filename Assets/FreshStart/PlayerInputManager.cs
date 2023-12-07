@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Oki
+namespace Player
 {
     public class PlayerInputManager : MonoBehaviour
     {

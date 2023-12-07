@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Oki
+namespace Player
 {
 	public class PlayerLocomotionManager : MonoBehaviour
 	{

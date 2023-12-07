@@ -2,15 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Oki
+namespace Player
 {
 	public class PlayerManager : MonoBehaviour
 	{
+		public static PlayerManager instance;
 		PlayerLocomotionManager playerLocomotionManager;
 		public CharacterController characterController;
 
 		private void Awake()
 		{
+			if (instance == null)
+			{
+				instance = this;
+			}
+			else
+			{
+				Destroy(gameObject);
+			}
 			playerLocomotionManager = GetComponent<PlayerLocomotionManager>();
 			characterController = GetComponent<CharacterController>();
 		}
