@@ -4,6 +4,7 @@ using System.ComponentModel;
 using UnityEditor.EditorTools;
 using UnityEngine;
 using UnityEngine.UIElements;
+using MyObjects;
 
 public class Gun : MonoBehaviour
 {

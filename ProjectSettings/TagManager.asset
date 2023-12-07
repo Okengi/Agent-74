@@ -4,7 +4,6 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Damagable
   - Weapon
   layers:
   - Default
