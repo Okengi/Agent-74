@@ -1,25 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
 namespace Player
 {
-	public class PlayerManager : MonoBehaviour
+	public class PlayerManager : NetworkBehaviour
 	{
-		public static PlayerManager instance;
 		PlayerLocomotionManager playerLocomotionManager;
 		public CharacterController characterController;
 
 		private void Awake()
 		{
-			if (instance == null)
-			{
-				instance = this;
-			}
-			else
-			{
-				Destroy(gameObject);
-			}
+			DontDestroyOnLoad(this);
 			playerLocomotionManager = GetComponent<PlayerLocomotionManager>();
 			characterController = GetComponent<CharacterController>();
 		}
@@ -31,13 +22,13 @@ namespace Player
 
 		private void Update()
 		{
-			playerLocomotionManager.HandleAllMovment();
+			playerLocomotionManager.HandleAllMovement();
 		}
 
 		private void LateUpdate()
 		{
 			PlayerCamera1.instance.HandleAllCameraActions();
-			playerLocomotionManager.HandleRotation();
+			playerLocomotionManager.HandleAllRotation();
 		}
 	}
 }

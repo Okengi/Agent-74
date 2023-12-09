@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Xml.Serialization;
 using UnityEngine;
 
 namespace Player
@@ -33,6 +30,10 @@ namespace Player
 			{
 				Destroy(gameObject);
 			}
+		}
+		private void Start()
+		{
+			DontDestroyOnLoad(gameObject);
 		}
 
 		public void HandleAllCameraActions()

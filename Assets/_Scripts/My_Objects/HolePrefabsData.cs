@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace MyObjects
 {
-	[CreateAssetMenu(fileName = "HolePrefabsData", menuName = "Custom/HolePrefabsData")]
+	[CreateAssetMenu(fileName = "HolePrefabsData", menuName = "Custom/My_Objects/HolePrefabsData")]
 	public class HolePrefabsData : ScriptableObject
 	{
 		[SerializeField] public GameObject[] holePrefabs;

@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/_Scenes/GunRange.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
+    path: Assets/_Scenes/Scene_Main_Menu_01.unity
+    guid: 602c7d561deb2394b80a5ff80fabcb64
+  - enabled: 1
+    path: Assets/_Scenes/Develop Arena.unity
+    guid: 657e7a23acbeeb44d8e69555a9c3c7f2
   m_configObjects: {}

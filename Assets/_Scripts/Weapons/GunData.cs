@@ -6,7 +6,6 @@ using UnityEditor.EditorTools;
 using UnityEditor.Toolbars;
 using UnityEngine;
 
-[CreateAssetMenu]
 public class GunData : ScriptableObject
 {
 	[Header("Fiering")]

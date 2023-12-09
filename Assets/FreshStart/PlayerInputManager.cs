@@ -32,6 +32,25 @@ namespace Player
 			}
 		}
 
+		private void Start()
+		{
+			DontDestroyOnLoad(gameObject);
+			SceneManager.activeSceneChanged += OnSceneChanged;
+			instance.enabled = false;
+		}
+
+		private void OnSceneChanged(Scene oldScene, Scene newScene)
+		{
+			if (newScene.buildIndex ==WorldSaveGameManager.instance.worldsceneIndex)
+			{
+				instance.enabled = true;
+			}
+			else
+			{
+				instance.enabled = false;
+			}
+		}
+
 		private void OnEnable()
 		{
 			if (playerControls == null )
@@ -41,6 +60,11 @@ namespace Player
 				playerControls.CameraRotation.Rotation.performed += i => camerInput = i.ReadValue<Vector2>();
 			}
 			playerControls.Enable();
+		}
+
+		private void OnDestroy()
+		{
+			SceneManager.activeSceneChanged -= OnSceneChanged;
 		}
 
 		private void Update()

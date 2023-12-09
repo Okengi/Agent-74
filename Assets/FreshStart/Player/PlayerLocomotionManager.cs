@@ -27,7 +27,7 @@ namespace Player
 			player = GetComponent<PlayerManager>();
 		}
 
-		public void HandleAllMovment()
+		public void HandleAllMovement()
 		{
 			HandleGroundMovement();
 		}
@@ -57,7 +57,7 @@ namespace Player
 			player.characterController.Move(moveDirection * walkingSpeed * Time.deltaTime);
 		}
 
-		public void HandleRotation()
+		public void HandleAllRotation()
 		{
 			GetRotationInput();
 			horizontalRotation += (horizontalCamerRotation * PlayerCamera1.instance.horizontalCameraSpeed) * Time.deltaTime;
